@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bucket-wrapper
+  namespace: dev
+  labels:
+    app.kubernetes.io/instance: bucket-wrapper
+    app.kubernetes.io/name: bucket-wrapper
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '600'
+spec:
+  rules:
+    - host: bucket-wrapper.dev.hub.eox.at
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bucket-wrapper
+                port:
+                  name: http

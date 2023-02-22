@@ -1,11 +1,20 @@
-# Base container
-FROM openjdk:11-jre-slim
+FROM python:3.10.5
 
-# First task: insert Fat-JAR package within the container
-COPY build/libs/template-service.jar /jar/
+ENV prometheus_multiproc_dir /var/tmp/prometheus_multiproc_dir
+RUN mkdir $prometheus_multiproc_dir \
+    && chown www-data $prometheus_multiproc_dir \
+    && chmod g+w $prometheus_multiproc_dir
 
-# Declare and expose service listening port
-EXPOSE 7000/tcp
+WORKDIR /srv/service
+ADD requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Declare entrypoint of that exposed service. In this case, running the inserted JAR package.
-ENTRYPOINT ["java", "-jar", "/jar/template-service.jar"]
+RUN apt install wget && \
+    wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/kubeseal-linux-amd64 -O kubeseal && \
+    install -m 755 kubeseal /usr/local/bin/kubeseal
+
+ADD . .
+
+USER www-data
+
+CMD ["gunicorn", "--bind=0.0.0.0:8080", "--config", "gunicorn.conf.py", "--workers=3", "-k", "uvicorn.workers.UvicornWorker", "--log-level=INFO", "bucket_wrapper:app"]
