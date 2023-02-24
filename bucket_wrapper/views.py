@@ -2,7 +2,6 @@ import logging
 
 from http import HTTPStatus
 
-from fastapi import Response
 from kubernetes import config as k8s_config, client as k8s_client
 from pydantic import BaseModel
 
@@ -56,3 +55,4 @@ async def create_bucket(data: BucketCredentials) -> None:
             },
         },
     )
+    return
