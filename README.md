@@ -70,11 +70,15 @@ The Bucket Oprator Wrapper provides an wrapper around the original Bucket Operat
 
 ### Installation
 
-TBD
+The Bucket Operator Wrapper is deployed via the rm-bucket-operator-wrapper helm chart from the EOEPCA [Helm Chart Repository](https://eoepca.github.io/helm-charts) - ref. [ Helm Chart for the Bucket Operator Wrapper](https://github.com/EOEPCA/helm-charts/blob/main/charts/rm-bucket-operator-wrapper).
+
+  helm install --version 0.0.2 --values rm-bucket-operator-wrapper-values.yaml \
+    --repo https://eoepca.github.io/helm-charts \
+    rm-bucket-operator-wrapper rm-bucket-operator-wrapper
 
 ## Documentation
 
-The component documentation can be found at https://eoepca.github.io/rm-bucket-operator-wrapper/.
+The component documentation can be found at https://deployment-guide.docs.eoepca.org/current/eoepca/workspace/#bucket-creation-webhook
 
 <!-- USAGE EXAMPLES -->
 
